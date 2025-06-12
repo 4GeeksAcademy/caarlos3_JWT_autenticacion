@@ -10,8 +10,7 @@ from flask_cors import CORS
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
-CORS(api)
-
+CORS(api, resources={r"/*": {"origins": "*"}})
 
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
@@ -42,7 +41,7 @@ def login():
     
     token = create_access_token(identity=user.id)
 
-    return jsonify({token: token}), 200
+    return jsonify({"token": token}), 200
 
 @api.route("/user/personal-data", methods=['GET'])
 @jwt_required()

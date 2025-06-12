@@ -6,7 +6,7 @@ import useGlobalReducer from "../hooks/useGlobalReducer"
 
 export const DataUser = () => {
 
-    const {store, dispatch} = useGlobalReducer();
+    const { store, dispatch } = useGlobalReducer();
 
     const navigate = useNavigate()
 
@@ -15,36 +15,58 @@ export const DataUser = () => {
 
             const backendUrl = import.meta.env.VITE_BACKEND_URL
 
-			if (!backendUrl) throw new Error("VITE_BACKEND_URL is not defined in .env file")
-            
-            if (!token){
-                navigate('/login')
-            }
+            if (!backendUrl) throw new Error("VITE_BACKEND_URL is not defined in .env file");
+
 
             const token = localStorage.getItem('token');
+            if (!token) {
+                navigate('/login')
+                return;
+            }
 
-			const userResponse = await fetch(`${backendUrl}/api/login`, {
+            const userResponse = await fetch(`${backendUrl}/api/data-user`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 }
             })
             const user = await userResponse.json()
-            dispatch({ type: 'set_user', psyload:{
-                user: user.user
-            }})
+            dispatch({
+                type: 'set_user', payload: {
+                    user: user.user
+                }
+            })
 
-            return user
+            return user;
 
-        } catch{
+        } catch {
             throw new Error('Error al traer usuario'),
             navigate('/login')
         }
     }
 
-    useEffect(() => (
-        DataUser()
-    ), [])
+    useEffect(() => {
+        let isMounted = true;
+        
+        const loadHandle = async () =>{
+
+            if (isMounted) {
+                try{
+                    await fetchUser();
+                } catch(error){
+                    console.log(error)
+                }
+                }
+        };
+        loadHandle();
+        return () => {
+            isMounted = false;
+        }
+        }, [])
+
+    if (!store.user){
+        return null
+    }
 
     return (
 

@@ -37,7 +37,7 @@ export default function storeReducer(store, action = {}) {
         const {user} = action.payload;
         return{
           ...store,
-          user
+          user,
         };
     default:
       throw Error('Unknown action.');

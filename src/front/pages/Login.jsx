@@ -18,8 +18,8 @@ export const Login = () => {
 
 			const response = await fetch(`${backendUrl}/api/login`, {
                 method: "POST",
-                header: {
-                    'Content-Type': 'appliction/json'
+                headers: {
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({email, password})
             } 
@@ -55,10 +55,10 @@ export const Login = () => {
                 <input type="email" name="emial" value={email} placeholder="emial" required onChange={(evt) => setEmail(evt.target.value)}/>
                 <label>Password</label>
                 <input type="password" name="password" value={password} placeholder="password" required onChange={(evt) => setPassword(evt.target.value)}/>
-            </form>
             <button className="btn btn-danger" type="submit">
                 Send
             </button>
+            </form>
 
         </section>
     )
