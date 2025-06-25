@@ -39,11 +39,11 @@ def login():
         return jsonify({'err': 'User not exist'}), 404
 
     
-    token = create_access_token(identity=user.id)
+    token = create_access_token(identity=str(user.id))
 
     return jsonify({"token": token}), 200
 
-@api.route("/user/personal-data", methods=['GET'])
+@api.route("/user/data-user", methods=['GET'])
 @jwt_required()
 def get_user_data():
     current_user_id = get_jwt_identity()

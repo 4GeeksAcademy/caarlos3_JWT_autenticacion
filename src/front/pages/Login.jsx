@@ -52,7 +52,7 @@ export const Login = () => {
         <section className="container d-flex justify-content-center">
             <form className="d-flex justify-content-center" onSubmit={handleOnsubmit}>
                 <label>Email</label>
-                <input type="email" name="emial" value={email} placeholder="emial" required onChange={(evt) => setEmail(evt.target.value)}/>
+                <input type="email" name="email" value={email} placeholder="email" required onChange={(evt) => setEmail(evt.target.value)}/>
                 <label>Password</label>
                 <input type="password" name="password" value={password} placeholder="password" required onChange={(evt) => setPassword(evt.target.value)}/>
             <button className="btn btn-danger" type="submit">

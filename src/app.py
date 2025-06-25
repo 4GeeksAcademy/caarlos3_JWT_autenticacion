@@ -21,7 +21,7 @@ app = Flask(__name__)
 app.url_map.strict_slashes = False
 
 # Configura la extensión Flask-JWT-Extended
-app.config["JWT_SECRET_KEY"] = "super-secret"  # ¡Cambia las palabras "super-secret" por otra cosa!
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "super-secret")  # ¡Cambia las palabras "super-secret" por otra cosa!
 jwt = JWTManager(app)
 
 

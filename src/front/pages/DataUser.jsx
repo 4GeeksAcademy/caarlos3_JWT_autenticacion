@@ -24,9 +24,8 @@ export const DataUser = () => {
                 return;
             }
 
-            const userResponse = await fetch(`${backendUrl}/api/data-user`, {
+            const userResponse = await fetch(`${backendUrl}/api/user/data-user`, {
                 headers: {
-                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 }
             })
@@ -47,24 +46,24 @@ export const DataUser = () => {
 
     useEffect(() => {
         let isMounted = true;
-        
-        const loadHandle = async () =>{
+
+        const loadHandle = async () => {
 
             if (isMounted) {
-                try{
+                try {
                     await fetchUser();
-                } catch(error){
+                } catch (error) {
                     console.log(error)
                 }
-                }
+            }
         };
         loadHandle();
         return () => {
             isMounted = false;
         }
-        }, [])
+    }, [])
 
-    if (!store.user){
+    if (!store.user) {
         return null
     }
 
@@ -75,6 +74,13 @@ export const DataUser = () => {
             <h2>
                 {store.user.email}
             </h2>
+            <button className="btn btn-danger" onClick={() => {
+                localStorage.removeItem('token');
+                dispatch({ type: 'set_user', payload: { user: null } });
+                navigate('/login');
+            }}>
+                Cerrar sesión
+            </button>
         </section>
     )
 }
