@@ -5,12 +5,10 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from flask_jwt_extended import create_access_token ,jwt_required, get_jwt_identity
 from api.models import db, User
 from api.utils import generate_sitemap, APIException
-from flask_cors import CORS
+
 
 api = Blueprint('api', __name__)
 
-# Allow CORS requests to this API
-CORS(api, resources={r"/*": {"origins": "*"}})
 
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
@@ -55,3 +53,29 @@ def get_user_data():
     user = user.serialize()
 
     return jsonify({'user': user}), 200   
+
+
+@api.route("/signup", methods=['POST'])
+def signup():
+    body = request.get_json()
+
+    if 'email' not in body or 'password' not in body:
+        return jsonify({'msg': 'Faltan parametros requeridos'}), 400
+    
+    email = body['email']
+    password = body['password']
+
+    user= User.query.filter_by(email=email).first()
+
+    if user:
+        return jsonify({'msg': 'Usuario existente'}), 409
+    
+    new_user = User(email = email, password=password, is_active=True )
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({'msg': 'Usuario creado'}), 201
+
+
+

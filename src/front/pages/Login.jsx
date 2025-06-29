@@ -8,6 +8,7 @@ export const Login = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
     const handleLogin = async (email, password) => {
 
@@ -27,17 +28,24 @@ export const Login = () => {
             )
 
             const data = await response.json()
+
+            if(response.ok && data.token){
             localStorage.setItem('token', data.token)
-            return data
+            return data;
+            }else{
+                setError(data.err || 'Error al hacer login ')
+            }
 
         }catch{
-            throw new Error ("Error al logear")
+            setError("Error al conectar con el servidor");
+            return null;
         }
 
     }
 
     const handleOnsubmit = async (evt) => {
         evt.preventDefault();
+        setError('');
         
         const response = await handleLogin(email, password)
         if(response) {
@@ -49,13 +57,13 @@ export const Login = () => {
 
     return(
 
-        <section className="container d-flex justify-content-center">
-            <form className="d-flex justify-content-center" onSubmit={handleOnsubmit}>
-                <label>Email</label>
-                <input type="email" name="email" value={email} placeholder="email" required onChange={(evt) => setEmail(evt.target.value)}/>
-                <label>Password</label>
+        <section className="container">
+            <form className="logInForm" onSubmit={handleOnsubmit}>
+                <label className="mb-3">Email</label>
+                <input className="mb-3" type="email" name="email" value={email} placeholder="email" required onChange={(evt) => setEmail(evt.target.value)}/>
+                <label className="mb-3">Password</label>
                 <input type="password" name="password" value={password} placeholder="password" required onChange={(evt) => setPassword(evt.target.value)}/>
-            <button className="btn btn-danger" type="submit">
+            <button className="btn btn-danger mt-3" type="submit">
                 Send
             </button>
             </form>

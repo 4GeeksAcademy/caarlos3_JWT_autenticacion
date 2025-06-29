@@ -26,17 +26,21 @@ export const DataUser = () => {
 
             const userResponse = await fetch(`${backendUrl}/api/user/data-user`, {
                 headers: {
+                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 }
             })
+
+            if(userResponse.ok){
             const user = await userResponse.json()
             dispatch({
                 type: 'set_user', payload: {
                     user: user.user
                 }
             })
-
             return user;
+        }
+
 
         } catch {
             throw new Error('Error al traer usuario'),
